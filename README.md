@@ -60,7 +60,7 @@ Analiz sonuçları, kullanıcıya PDF formatında indirilebilir şekilde sunulur
 
 ---
 
-📌 Not: Bu sprintte amaç, projenin temel işlevlerini ve kullanıcı akışını planlamaktır.
+Not: Bu sprintte amaç, projenin temel işlevlerini ve kullanıcı akışını planlamaktır.
 Uygulamanın geliştirilmeye başlanması bir sonraki sprintte öngörülmektedir.
 Web site arayüzü ise henüz nihai formuna ulaşmamış olup, ilerleyen sprintlerde şekillendirilecektir.
 
