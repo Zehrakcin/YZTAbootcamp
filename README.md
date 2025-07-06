@@ -61,3 +61,12 @@ Analiz sonuçları, kullanıcıya PDF formatında indirilebilir şekilde sunulur
 📌 Not: Bu sprintte amaç, projenin temel işlevlerini ve kullanıcı akışını planlamaktır.
 Uygulamanın geliştirilmeye başlanması bir sonraki sprintte öngörülmektedir.
 Web site arayüzü ise henüz nihai formuna ulaşmamış olup, ilerleyen sprintlerde şekillendirilecektir.
+
+---
+
+## Sprint 1
+
+![image](https://github.com/user-attachments/assets/f21493aa-b9e3-4e47-830e-3aea7f679742)
+
+
+
