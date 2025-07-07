@@ -5,7 +5,6 @@ Daily Scrum toplantılarının zamansal sebeplerden ötürü **WhatsApp** üzeri
 
 ###  Süreç:
 - 26 Haziran – 30 Haziran tarihleri arasında günlük olarak yazılı bilgilendirme yapılmıştır.
-- Günlük ilerleme detayları ortak Google Docs belgesi üzerinden de güncellenmiştir.
 
 ###  Canlı Toplantı:
 - **30 Haziran 2025** tarihinde Zoom üzerinden canlı toplantı gerçekleştirilmiştir.
