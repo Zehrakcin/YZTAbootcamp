@@ -86,23 +86,13 @@ Ayrıca, 30 Haziran tarihinde gerçekleştirilen bir Zoom toplantısıyla, ekip 
 
 Bu sprintte projenin temelleri atılmıştır. Ana proje fikri oluşturulmuş, görev dağılımı yapılmış, ürün hedefleri netleştirilmiş ve görsel taslaklar üretilmiştir.
 
-## Dosya Listesi
-
-| Dosya |
-|-------|
-| [Product_Backlog.md](./Product_Backlog.md) 
-| [Sprint_Review.md](./Sprint_Review.md) 
-| [Sprint_Retrospective.md](./Sprint_Retrospective.md) 
-| [Daily_Scrum.md](./Daily_Scrum.md) 
-| 📂 screenshots/ 
-
 ---
 
 > **Not:** Tüm görseller `sprint1/screenshots/` klasöründe yer almaktadır.
 
 ---
 
-## 📌 Notlar
+##  Notlar
 
 - Görsel taslak üzerinden ilk planlama yapılmıştır.
 - Kodlama süreci Sprint 2'de başlayacaktır.
