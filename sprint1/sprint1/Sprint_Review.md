@@ -23,7 +23,7 @@ Proje fikrinin belirlenmesi, temel yapıların oluşturulması, kullanıcı ihti
 ---
 
 ###  Geri Bildirim Süreci:
-Sprint sonunda takım içi geri bildirim toplantısı yapılmış, ortak Google Docs üzerinden herkes görüş bildirmiştir. Proje yönü ve uygulanabilirlik açısından olumlu görüşler alınmış; ancak analiz sürecinin daha detaylandırılması gerektiği belirtilmiştir.
+Sprint sonunda takım içi geri bildirim toplantısı yapılmıştır. Proje yönü ve uygulanabilirlik açısından olumlu görüşler alınmış; ancak analiz sürecinin daha detaylandırılması gerektiği belirtilmiştir.
 
 ---
 
