@@ -78,5 +78,39 @@ Ayrıca, 30 Haziran tarihinde gerçekleştirilen bir Zoom toplantısıyla, ekip 
 
 ![image](https://github.com/user-attachments/assets/f21493aa-b9e3-4e47-830e-3aea7f679742)
 
+* Ürünün Protatip Arayüzü
+
+![ornek_arayuz](https://github.com/user-attachments/assets/c2e8691f-0840-4735-98f1-9f04efdd9bd2)
+
+# 🚀 Sprint 1 - ScanWise AI
+
+Bu sprintte projenin temelleri atılmıştır. Ana proje fikri oluşturulmuş, görev dağılımı yapılmış, ürün hedefleri netleştirilmiş ve görsel taslaklar üretilmiştir.
+
+## Dosya Listesi
+
+| Dosya |
+|-------|
+| [Product_Backlog.md](./Product_Backlog.md) 
+| [Sprint_Review.md](./Sprint_Review.md) 
+| [Sprint_Retrospective.md](./Sprint_Retrospective.md) 
+| [Daily_Scrum.md](./Daily_Scrum.md) 
+| 📂 screenshots/ 
+
+---
+
+> **Not:** Tüm görseller `sprint1/screenshots/` klasöründe yer almaktadır.
+
+---
+
+## 📌 Notlar
+
+- Görsel taslak üzerinden ilk planlama yapılmıştır.
+- Kodlama süreci Sprint 2'de başlayacaktır.
+- Eğitim modülü ve detaylı görüntü açıklama sistemi, Sprint 3'e aktarılmıştır.
+
+---
+
+📍 Hazırlayan: Goncagül Kılınç (Scrum Master)
+
 
 
