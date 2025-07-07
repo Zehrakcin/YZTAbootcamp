@@ -68,23 +68,6 @@ Web site arayüzü ise henüz nihai formuna ulaşmamış olup, ilerleyen sprintl
 
 ## Sprint 1
 
-* Sprint içinde tamamlanması tahmin edilen puan: 100 Puan
-* Daily Scrum Süreci
-Daily Scrum toplantıları, ekip üyelerinin yoğun zaman planlamaları nedeniyle WhatsApp üzerinden metinsel olarak yürütülmüştür.
-Günlük ilerleme paylaşımları, takımın ortak erişimine açık olan Trello üzerinden detaylı şekilde kaydedilmiş ve herkesin aynı bilgiler üzerinde ilerlemesi sağlanmıştır. WhatsApp üzerinden detaylandırılarak projeye devam etmekteyiz.
-
-Ayrıca, 30 Haziran tarihinde gerçekleştirilen bir Zoom toplantısıyla, ekip üyeleri birbirini daha yakından tanıma fırsatı bulmuş ve proje üzerindeki fikir ayrılıklarını tartışarak ortak bir zeminde buluşmuştur.
-
-
-![image](https://github.com/user-attachments/assets/f21493aa-b9e3-4e47-830e-3aea7f679742)
-
-* Ürünün Protatip Arayüzü
-
-![ornek_arayuz](https://github.com/user-attachments/assets/c2e8691f-0840-4735-98f1-9f04efdd9bd2)
-
----
-
-
 | Dosya |
 |-------|
 | [Product_Backlog.md](sprint1/Product_Backlog.md)
@@ -93,6 +76,16 @@ Ayrıca, 30 Haziran tarihinde gerçekleştirilen bir Zoom toplantısıyla, ekip 
 | [Daily_Scrum.md](sprint1/sprint1/Daily_Scrum.md) 
 
 > **Not:** Tüm görseller `sprint1/screenshots/` klasöründe yer almaktadır.
+
+---
+
+*Ekip olarak ilerlerleme tablosu
+
+![image](https://github.com/user-attachments/assets/f21493aa-b9e3-4e47-830e-3aea7f679742)
+
+* Ürünün Protatip Arayüzü
+
+![ornek_arayuz](https://github.com/user-attachments/assets/c2e8691f-0840-4735-98f1-9f04efdd9bd2)
 
 ---
 
