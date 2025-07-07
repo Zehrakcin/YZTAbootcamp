@@ -82,11 +82,15 @@ Ayrıca, 30 Haziran tarihinde gerçekleştirilen bir Zoom toplantısıyla, ekip 
 
 ![ornek_arayuz](https://github.com/user-attachments/assets/c2e8691f-0840-4735-98f1-9f04efdd9bd2)
 
-# 🚀 Sprint 1 - ScanWise AI
-
-Bu sprintte projenin temelleri atılmıştır. Ana proje fikri oluşturulmuş, görev dağılımı yapılmış, ürün hedefleri netleştirilmiş ve görsel taslaklar üretilmiştir.
-
 ---
+
+
+| Dosya |
+|-------|
+| [Product_Backlog.md](sprint1/Product_Backlog.md)
+| [Sprint_Review.md](sprint1/sprint1/Sprint_Review.md)
+| [Sprint_Retrospective.md](sprint1/sprint1/Sprint_Retrospective.md)
+| [Daily_Scrum.md](sprint1/sprint1/Daily_Scrum.md) 
 
 > **Not:** Tüm görseller `sprint1/screenshots/` klasöründe yer almaktadır.
 
