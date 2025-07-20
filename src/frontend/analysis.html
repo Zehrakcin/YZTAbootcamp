@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ScanWiseAI - Görüntü Analizi</title>
+  <link rel="icon" href="assets/img/logo.png" type="image/png">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="home.html">
+        <img src="assets/img/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+        ScanWiseAI
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
+  <section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold">Medikal Görüntü Analizi</h1>
+      <p class="lead">Yapay zekâ destekli otomatik değerlendirme</p>
+    </div>
+  </section>
+
+  <!-- Upload and Analysis Section -->
+  <section class="py-5">
+    <div class="container">
+      <form id="upload-form">
+        <div class="mb-4">
+          <label for="imageUpload" class="form-label">Görüntü Seç (JPEG, PNG, DICOM)</label>
+          <input class="form-control" type="file" id="imageUpload" accept=".png,.jpg,.jpeg,.dcm" required>
+        </div>
+
+        <div id="preview" class="mb-4" style="display: none;">
+          <p><strong>Yüklenen Görüntü:</strong></p>
+          <img id="preview-img" class="img-fluid border rounded" style="max-height: 300px;" alt="Önizleme">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Analizi Başlat</button>
+      </form>
+
+      <div id="analysis-result" class="mt-5" style="display: none;">
+        <h4>📋 Analiz Sonucu</h4>
+        <p id="result-text">Yapay zekâ modeli analizi burada görünecek.</p>
+        <a href="#" class="btn btn-outline-secondary mt-3" id="download-report" download="ScanWiseAI_Report.pdf">📄 PDF Raporu İndir</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to Home -->
+  <div class="text-center mb-5">
+    <a href="home.html" class="btn btn-outline-dark">← Anasayfaya Dön</a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>© 2025 VisionMinds | ScanWiseAI</small>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
