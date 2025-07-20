@@ -73,6 +73,21 @@ Sistem sayesinde kullanıcılar sırasıyla:
 
 ![sample_ui](https://github.com/emirroguz/ScanWiseAI/blob/main/sprint1/screenshots/sample_ui.png)
 
+---
+SPRİNT 2 
+
+- Yapay zeka sonucu gösterimi eklendi
+- Latince kelimelere tooltip ile açıklama özelliği geliştirildi
+- PDF ve DOCX çıktısı alınabilmesi sağlandı
+
+
+![WhatsApp Görsel 2025-07-20 saat 23 34 48_26d57041](https://github.com/user-attachments/assets/65a3e950-d171-4070-b81c-8fc918abf7ad)
+
+<img width="587" height="322" alt="03" src="https://github.com/user-attachments/assets/43b01966-1fb2-4b33-8dfd-ad9948182841" />
+
+
+
+
 
 ## *Ek Notlar*
 
