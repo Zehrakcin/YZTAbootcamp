@@ -85,8 +85,7 @@ SPRİNT 2
 
 <img width="587" height="322" alt="03" src="https://github.com/user-attachments/assets/43b01966-1fb2-4b33-8dfd-ad9948182841" />
 
-
-
+<img width="474" height="268" alt="image" src="https://github.com/user-attachments/assets/9172af6c-d95c-476c-a3fd-eeefd1c49f60" />
 
 
 ## *Ek Notlar*
