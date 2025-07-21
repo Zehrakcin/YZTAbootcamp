@@ -57,44 +57,56 @@ Sistem sayesinde kullanıcılar sırasıyla:
 | Dosya |
 |-------|
 | [Product_Backlog.md](sprint1/docs/Product_Backlog.md)
+| [Daily_Scrum.md](sprint1/docs/Daily_Scrum.md) 
 | [Sprint_Review.md](sprint1/docs/Sprint_Review.md)
 | [Sprint_Retrospective.md](sprint1/docs/Sprint_Retrospective.md)
-| [Daily_Scrum.md](sprint1/docs/Daily_Scrum.md) 
 
-> **Not:** Bu sprintte amaç, projenin temel işlevlerini ve kullanıcı akışını planlamaktır. Uygulamanın geliştirilmeye başlanması bir sonraki sprintte öngörülmektedir. Web site arayüzü ise henüz nihai formuna ulaşmamış olup, ilerleyen sprintlerde şekillendirilecektir. Tüm görseller `sprint1/screenshots/` klasöründe yer almaktadır.
-
-
-## *İlerleme Tablosu*
-
-![plan](https://github.com/emirroguz/ScanWiseAI/blob/main/sprint1/screenshots/plan.png)
+- Bu sprintte amaç, projenin temel işlevlerini ve kullanıcı akışını planlamaktır. Uygulamanın geliştirilmeye başlanması bir sonraki sprintte öngörülmektedir. Web site arayüzü ise henüz nihai formuna ulaşmamış olup, ilerleyen sprintlerde şekillendirilecektir.
+- Tüm görseller `sprint1/screenshots/` klasöründe yer almaktadır.
 
 
-## *Ürünün Prototip Arayüzü (Taslak Şablon)*
+### *İlerleme Tablosu*
 
-![sample_ui](https://github.com/emirroguz/ScanWiseAI/blob/main/sprint1/screenshots/sample_ui.png)
+![plan](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint1/screenshots/plan.png)
+
+
+### *Ürünün Prototip Arayüzü (Taslak Şablon)*
+
+![sample_ui](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint1/screenshots/sample_ui.png)
+
+
+## *Sprint 2*
+
+| Dosya |
+|-------|
+| [Product_Backlog.md](sprint2/docs/Product_Backlog.md)
+| [Daily_Scrum.md](sprint2/docs/Daily_Scrum.md) 
+| [Sprint_Review.md](sprint2/docs/Sprint_Review.md)
+| [Sprint_Retrospective.md](sprint2/docs/Sprint_Retrospective.md)
+
+- Temel arayüz oluşturuldu.
+- Analiz sonucu gösterimi örneklendi.
+- Latince kelimelere tooltip ile açıklama özelliği geliştirildi.
+- PDF ve DOCX çıktısı alınabilmesi sağlandı.
+
+
+### *Arayüzün Temel Görüntüsü*
+
+![initial_ui](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint2/screenshots/scanwise_ui.png)
+
+
+### *Analiz Sonucu*
+
+![anaylsis](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint2/screenshots/analysis_result_1.png)
+
+
+### *Tooltip Özelliği*
+
+![anaylsis](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint2/screenshots/analysis_result_2.png)
+
 
 ---
-SPRİNT 2 
 
-- Yapay zeka sonucu gösterimi eklendi
-- Latince kelimelere tooltip ile açıklama özelliği geliştirildi
-- PDF ve DOCX çıktısı alınabilmesi sağlandı
-
-
-![WhatsApp Görsel 2025-07-20 saat 23 34 48_26d57041](https://github.com/user-attachments/assets/65a3e950-d171-4070-b81c-8fc918abf7ad)
-
-<img width="587" height="322" alt="03" src="https://github.com/user-attachments/assets/43b01966-1fb2-4b33-8dfd-ad9948182841" />
-
-<img width="474" height="268" alt="image" src="https://github.com/user-attachments/assets/9172af6c-d95c-476c-a3fd-eeefd1c49f60" />
-
-
-## *Ek Notlar*
-
-- Görsel taslak üzerinden ilk planlama yapılmıştır.
-- Kodlama süreci Sprint 2'de başlayacaktır.
-- Eğitim modülü ve detaylı görüntü açıklama sistemi, Sprint 3'e aktarılmıştır.
-
----
 
 📍 Hazırlayan: Goncagül Kılınç (Scrum Master)
 
