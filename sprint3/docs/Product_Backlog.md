@@ -8,4 +8,4 @@
 
 ## PUAN DURUMU
 
-* Her bir madde 6 puandır. Toplam : 24 puan 
+* Her bir madde 6 puandır. Toplam : 50 puan 
