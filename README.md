@@ -42,6 +42,9 @@ Sistem sayesinde kullanıcılar sırasıyla:
 - PDF Rapor Çıktısı: Analiz sonuçları, kullanıcıya PDF formatında indirilebilir şekilde sunulur.
 
 
+
+
+
 ## *Hedef Kitle*
 
 | Kullanıcı Grubu            | Kullanım Amacı                                      |
@@ -63,7 +66,10 @@ Sistem sayesinde kullanıcılar sırasıyla:
 
 - Bu sprintte amaç, projenin temel işlevlerini ve kullanıcı akışını planlamaktır. Uygulamanın geliştirilmeye başlanması bir sonraki sprintte öngörülmektedir. Web site arayüzü ise henüz nihai formuna ulaşmamış olup, ilerleyen sprintlerde şekillendirilecektir.
 - Tüm görseller `sprint1/screenshots/` klasöründe yer almaktadır.
-
+### *Veri Setinden Örnekler*
+<img width="692" height="677" alt="Ekran Resmi 2025-08-03 23 02 05" src="https://github.com/user-attachments/assets/786c4e79-96e2-4d86-b856-95c7ac9259ca" />
+<img width="697" height="679" alt="Ekran Resmi 2025-08-03 23 01 45" src="https://github.com/user-attachments/assets/ea373d3b-1276-4fc3-ad5f-62d3976541ec" />
+<img width="695" height="681" alt="Ekran Resmi 2025-08-03 23 01 15" src="https://github.com/user-attachments/assets/bcadb0f1-2a53-4073-933f-b16b3a759632" />
 
 ### *İlerleme Tablosu*
 
@@ -89,25 +95,30 @@ Sistem sayesinde kullanıcılar sırasıyla:
 - Latince kelimelere tooltip ile açıklama özelliği geliştirildi.
 - PDF ve DOCX çıktısı alınabilmesi sağlandı.
 
+## *Sprint 3*
 
+## *Trello*
+  <img width="1116" height="499" alt="Ekran Resmi 2025-08-03 23 04 47" src="https://github.com/user-attachments/assets/be6d0c6a-2d1d-4f57-98ff-12219a1585cc" />
+  
 ### *Arayüzün Temel Görüntüsü*
+<img width="1418" height="670" alt="Ekran Resmi 2025-08-03 23 12 58" src="https://github.com/user-attachments/assets/ca5f7deb-dd55-4d31-a519-8d2af789609b" />
 
-![initial_ui](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint2/screenshots/scanwise_ui.png)
+
+<img width="1423" height="622" alt="Ekran Resmi 2025-08-03 23 13 27" src="https://github.com/user-attachments/assets/cab6fe5d-46db-4569-8ce8-86cbe9622fc1" />
+
+
+<img width="1436" height="526" alt="Ekran Resmi 2025-08-03 23 14 36" src="https://github.com/user-attachments/assets/7c4959af-53fa-46db-a4bd-d1fc7f48bee7" />
+
 
 
 ### *Analiz Sonucu*
 
-![anaylsis](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint2/screenshots/analysis_result_1.png)
+<img width="1424" height="461" alt="Ekran Resmi 2025-08-03 23 14 13" src="https://github.com/user-attachments/assets/60a261d3-7a63-4ca3-a661-aeed341c6d6e" />
 
 
-### *Tooltip Özelliği*
+<img width="1424" height="650" alt="Ekran Resmi 2025-08-03 23 13 49" src="https://github.com/user-attachments/assets/85c7d378-d6e1-442e-8509-b3a635cc06a2" />
 
-![anaylsis](https://github.com/Zehrakcin/YZTAbootcamp/blob/main/sprint2/screenshots/analysis_result_2.png)
+
 
 
 ---
-
-
-📍 Hazırlayan: Goncagül Kılınç (Scrum Master)
-
-📍 Düzenleyen: Emir Oğuz (Developer)
