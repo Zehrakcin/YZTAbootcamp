@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+
+{% block title %}ScanWiseAI - Sağlık Asistanı{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <!-- Başlık ve Açıklama -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">🏥 ScanWiseAI Sağlık Asistanı</h2>
+        <p class="text-gray-700 mb-4">
+            Akciğer sağlığınız hakkında detaylı bilgi alın, hastalık raporları oluşturun ve uzman önerileri edinin. 
+            Yapay zeka destekli sağlık asistanımız size kişiselleştirilmiş sağlık bilgileri sunar.
+        </p>
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        <strong>Önemli:</strong> Bu sistem sadece bilgilendirme amaçlıdır ve bir doktor tavsiyesi yerine geçmez. 
+                        Ciddi sağlık sorunları için mutlaka bir doktora başvurulmalıdır.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hastalık Seçimi ve Rapor Oluşturma -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">📋 Detaylı Sağlık Raporu Oluştur</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <!-- Solunum Hastalıkları -->
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-800 mb-3">🫁 Solunum Hastalıkları</h4>
+                <div class="space-y-2">
+                    <button onclick="generateReport('Astım', 'Solunum Hastalıkları')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Astım
+                    </button>
+                    <button onclick="generateReport('Bronşit', 'Solunum Hastalıkları')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Bronşit
+                    </button>
+                    <button onclick="generateReport('KOAH', 'Solunum Hastalıkları')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • KOAH
+                    </button>
+                    <button onclick="generateReport('Akciğer İltihabı', 'Solunum Hastalıkları')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Akciğer İltihabı
+                    </button>
+                </div>
+            </div>
+
+            <!-- X-ray Tespit Edilen Hastalıklar -->
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-800 mb-3">🔍 X-ray Hastalıkları</h4>
+                <div class="space-y-2">
+                    <button onclick="generateReport('Konjenital Anomali', 'X-ray Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Konjenital Anomali
+                    </button>
+                    <button onclick="generateReport('Mediastinal Kitle', 'X-ray Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Mediastinal Kitle
+                    </button>
+                    <button onclick="generateReport('Plevral Efüzyon', 'X-ray Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Plevral Efüzyon
+                    </button>
+                    <button onclick="generateReport('Akciğer Sönmesi (Pneumotorax)', 'X-ray Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Akciğer Sönmesi
+                    </button>
+                    <button onclick="generateReport('Tüberküloz', 'X-ray Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Tüberküloz
+                    </button>
+                    <button onclick="generateReport('Akciğer Tümörü', 'X-ray Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Akciğer Tümörü
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kanser Analizi -->
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-800 mb-3">🩺 Kanser Analizi</h4>
+                <div class="space-y-2">
+                    <button onclick="generateReport('Benign (İyi Huylu)', 'Kanser Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Benign (İyi Huylu)
+                    </button>
+                    <button onclick="generateReport('Malignant (Kötü Huylu)', 'Kanser Analizi')" 
+                            class="w-full text-left p-2 hover:bg-gray-50 rounded text-sm">
+                        • Malignant (Kötü Huylu)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Özel Hastalık Seçimi -->
+        <div class="border-t pt-4">
+            <h4 class="font-semibold text-gray-800 mb-3">🔍 Özel Hastalık Ara</h4>
+            <div class="flex space-x-2">
+                <input type="text" id="customDisease" placeholder="Hastalık adını yazın..." 
+                       class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="generateCustomReport()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                    Rapor Oluştur
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rapor Önizleme Alanı -->
+    <div id="reportPreview" class="bg-white shadow rounded-lg p-6 mb-6" style="display: none;">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">📄 Rapor Önizleme</h3>
+            <button onclick="closeReportPreview()" 
+                    class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <div id="reportContent" class="text-gray-700 max-h-96 overflow-y-auto border border-gray-200 rounded-lg p-4 mb-4"></div>
+        
+        <div class="flex space-x-3">
+            <button onclick="downloadReport()" 
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                📥 PDF İndir
+            </button>
+            <button onclick="printReport()" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                🖨️ Yazdır
+            </button>
+        </div>
+    </div>
+
+    <!-- Hızlı Bilgi Kartları -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Genel Sağlık Bilgileri -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">💡 Genel Sağlık</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+                <p>• Düzenli egzersiz yapın</p>
+                <p>• Sigarayı bırakın</p>
+                <p>• Temiz hava alın</p>
+                <p>• Düzenli kontrol yaptırın</p>
+            </div>
+        </div>
+
+        <!-- Acil Durumlar -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">🚨 Acil Durumlar</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+                <p>• Nefes darlığı</p>
+                <p>• Göğüs ağrısı</p>
+                <p>• Kanlı balgam</p>
+                <p>• Yüksek ateş</p>
+                <p class="text-red-600 font-semibold">Acil: 112'yi arayın</p>
+            </div>
+        </div>
+
+        <!-- Önleme Yöntemleri -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">🛡️ Önleme</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+                <p>• Aşı olun</p>
+                <p>• Hijyen kurallarına uyun</p>
+                <p>• Sağlıklı beslenin</p>
+                <p>• Stresten uzak durun</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Son Oluşturulan Raporlar -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Son Raporlarınız</h3>
+        <div id="recentReports" class="text-gray-600">
+            <p>Henüz rapor oluşturmadınız.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Global variables
+    let currentReportData = null;
+    let currentReportFilename = null;
+    let recentReports = [];
+
+    // Function to generate report
+    async function generateReport(diseaseName, predictionType) {
+        try {
+            const response = await fetch('/generate_comprehensive_health_report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    disease_name: diseaseName,
+                    prediction_type: predictionType
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                currentReportData = data.pdf_data;
+                currentReportFilename = data.filename;
+                
+                // Show report preview
+                document.getElementById('reportContent').innerHTML = data.report_text.replace(/\n/g, '<br>');
+                document.getElementById('reportPreview').style.display = 'block';
+                
+                // Add to recent reports
+                addToRecentReports(diseaseName, predictionType);
+                
+                // Scroll to report preview
+                document.getElementById('reportPreview').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Rapor oluşturulurken hata oluştu: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Rapor oluşturulurken bir hata oluştu.');
+        }
+    }
+
+    // Function to generate custom report
+    function generateCustomReport() {
+        const diseaseName = document.getElementById('customDisease').value.trim();
+        if (!diseaseName) {
+            alert('Lütfen bir hastalık adı girin.');
+            return;
+        }
+        generateReport(diseaseName, 'Özel Analiz');
+    }
+
+    // Function to download report
+    async function downloadReport() {
+        if (!currentReportData) {
+            alert('İndirilecek rapor bulunamadı.');
+            return;
+        }
+        
+        try {
+            // İndirme butonunu devre dışı bırak
+            const downloadBtn = event.target;
+            const originalText = downloadBtn.textContent;
+            downloadBtn.textContent = '⏳ İndiriliyor...';
+            downloadBtn.disabled = true;
+            
+            const response = await fetch('/download_health_report_pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    pdf_data: currentReportData,
+                    filename: currentReportFilename
+                })
+            });
+            
+            if (response.ok) {
+                const blob = await response.blob();
+                
+                // Blob boyutunu kontrol et
+                if (blob.size === 0) {
+                    throw new Error('PDF dosyası boş');
+                }
+                
+                // Dosya indirme işlemi
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = currentReportFilename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                
+                // Temizlik
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }, 100);
+                
+                // Başarı mesajı
+                alert('PDF başarıyla indirildi!');
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || 'PDF indirme hatası oluştu.');
+            }
+        } catch (error) {
+            console.error('PDF indirme hatası:', error);
+            alert('PDF indirme hatası: ' + error.message);
+        } finally {
+            // Butonu eski haline getir
+            const downloadBtn = event.target;
+            downloadBtn.textContent = originalText;
+            downloadBtn.disabled = false;
+        }
+    }
+
+    // Function to print report
+    function printReport() {
+        const reportContent = document.getElementById('reportContent').innerHTML;
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Sağlık Raporu</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .content { margin: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>ScanWiseAI Sağlık Raporu</h1>
+                        <p>Tarih: ${new Date().toLocaleDateString('tr-TR')}</p>
+                    </div>
+                    <div class="content">
+                        ${reportContent}
+                    </div>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+    // Function to close report preview
+    function closeReportPreview() {
+        document.getElementById('reportPreview').style.display = 'none';
+        currentReportData = null;
+        currentReportFilename = null;
+    }
+
+    // Function to add to recent reports
+    function addToRecentReports(diseaseName, predictionType) {
+        const report = {
+            disease: diseaseName,
+            type: predictionType,
+            date: new Date().toLocaleDateString('tr-TR'),
+            time: new Date().toLocaleTimeString('tr-TR')
+        };
+        
+        recentReports.unshift(report);
+        if (recentReports.length > 5) {
+            recentReports = recentReports.slice(0, 5);
+        }
+        
+        updateRecentReportsDisplay();
+    }
+
+    // Function to update recent reports display
+    function updateRecentReportsDisplay() {
+        const container = document.getElementById('recentReports');
+        
+        if (recentReports.length === 0) {
+            container.innerHTML = '<p>Henüz rapor oluşturmadınız.</p>';
+            return;
+        }
+        
+        const reportsHTML = recentReports.map(report => `
+            <div class="border-b border-gray-200 py-2">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span class="font-medium">${report.disease}</span>
+                        <span class="text-gray-500 text-sm"> - ${report.type}</span>
+                    </div>
+                    <div class="text-gray-500 text-sm">
+                        ${report.date} ${report.time}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        container.innerHTML = reportsHTML;
+    }
+
+    // Enter key support for custom disease input
+    document.getElementById('customDisease').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            generateCustomReport();
+        }
+    });
+</script>
+{% endblock %} 

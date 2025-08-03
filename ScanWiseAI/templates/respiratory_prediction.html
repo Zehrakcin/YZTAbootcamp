@@ -1,0 +1,434 @@
+{% extends 'base.html' %}
+
+{% block title %}ScanWiseAI - Solunum Sesleri ile Tahmin{% endblock %}
+
+{% block content %}
+    <div class="p-6">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <!-- Kısa Açıklama ve Bilgilendirme -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Solunum Sesleri ile Hastalık Tespiti</h2>
+                <p class="text-gray-700 mb-2">Bu modül, yüklediğiniz solunum sesi kaydını analiz ederek aşağıdaki hastalıkların tespitine yardımcı olur:</p>
+                <ul class="list-disc list-inside text-gray-700 mb-2">
+                    <li>Sağlıklı</li>
+                    <li>Astım</li>
+                    <li>Bronşit</li>
+                    <li>KOAH</li>
+                    <li>Akciğer İltihabı</li>
+                </ul>
+                <p class="text-gray-600">Yapay zeka destekli analiz ile erken teşhis ve tedavi şansınızı artırın.</p>
+            </div>
+
+            <!-- Örnek Dosya veya Demo -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+                <span class="text-blue-700 font-medium">Sistemi denemek için örnek solunum seslerini indirebilirsiniz.</span>
+                <a href="/static/demo/ornek_wav.zip" download class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">Örnek Dosya İndir</a>
+            </div>
+
+            <!-- Tahmin Formu -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <form action="" method="post" enctype="multipart/form-data" class="space-y-4" id="predictionForm">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Solunum Sesi Dosyası</label>
+                        <input type="file" name="file" accept="audio/*" class="mt-1 block w-full" required id="audioFile">
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        Tahmin Yap
+                    </button>
+                </form>
+            </div>
+
+            <!-- Ses Dalga Formu Görselleştirmesi -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6" id="waveformContainer" style="display: none;">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Ses Dalga Formu</h3>
+                <div class="h-48">
+                    <canvas id="waveformChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Tahmin Sonucu Açıklama Alanı (Dinamik) -->
+            {% if prediction_result %}
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-semibold text-green-800 mb-2">Tahmin Sonucu</h3>
+                <p class="text-green-700 mb-1">Tespit Edilen: <span class="font-bold">{{ prediction_result }}</span></p>
+                
+                <!-- Dinamik Hastalık Bilgisi -->
+                <div id="diseaseInfo" class="mt-3">
+                    <div class="animate-pulse">
+                        <div class="h-4 bg-green-200 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-green-200 rounded w-1/2"></div>
+                    </div>
+                </div>
+                
+                <!-- Sağlık Asistanı Rapor Butonları -->
+                <div class="mt-4 space-y-2">
+                    <button onclick="generateComprehensiveReport('{{ prediction_result }}', 'Solunum Sesleri Analizi', event)" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+                        📋 Detaylı Sağlık Raporu Oluştur
+                    </button>
+                    <button onclick="showDiseaseInfo('{{ prediction_result }}')" 
+                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+                        ℹ️ Hastalık Hakkında Bilgi Al
+                    </button>
+                </div>
+                
+                <!-- Rapor Önizleme Alanı -->
+                <div id="reportPreview" class="mt-4 p-4 bg-white rounded-lg border border-gray-200" style="display: none;">
+                    <h4 class="font-semibold text-gray-800 mb-2">Rapor Önizleme</h4>
+                    <div id="reportContent" class="text-sm text-gray-700 max-h-40 overflow-y-auto"></div>
+                    <div class="mt-3 flex space-x-2">
+                        <button onclick="downloadReport(event)" 
+                                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-medium">
+                            📥 PDF İndir
+                        </button>
+                        <button onclick="closeReportPreview()" 
+                                class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs font-medium">
+                            ✕ Kapat
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Yükleme ve Sonuç Geçmişi -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Yükleme ve Sonuç Geçmişi</h3>
+                {% if prediction_history %}
+                <table class="min-w-full text-left text-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4">Tarih</th>
+                            <th class="py-2 px-4">Dosya Adı</th>
+                            <th class="py-2 px-4">Sonuç</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prediction in prediction_history %}
+                        <tr class="border-t">
+                            <td class="py-2 px-4">{{ prediction.prediction_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td class="py-2 px-4">{{ prediction.filename }}</td>
+                            <td class="py-2 px-4">{{ prediction.prediction_result }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-gray-600">Henüz tahmin geçmişi bulunmamaktadır.</p>
+                {% endif %}
+            </div>
+
+            <!-- Tahmin İstatistikleri -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tahmin İstatistikleri</h3>
+                <div class="h-64">
+                    <canvas id="predictionChart"></canvas>
+                </div>
+            </div>
+
+            <script>
+                // Bu script bloğu boş, kaldırılıyor
+            </script>
+
+            <!-- Sıkça Sorulan Sorular (SSS) -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Sıkça Sorulan Sorular</h3>
+                <div class="mb-2">
+                    <p class="font-medium">Hangi hastalıklar tespit edilebilir?</p>
+                    <p class="text-gray-700 text-sm">Sağlıklı, Astım, Bronşit, KOAH ve Akciğer İltihabı.</p>
+                </div>
+                <div class="mb-2">
+                    <p class="font-medium">Sonuçlar ne kadar güvenilir?</p>
+                    <p class="text-gray-700 text-sm">Yapay zeka modellerimiz yüksek doğruluk oranına sahiptir, ancak sonuçlar kesin tıbbi teşhis yerine geçmez.</p>
+                </div>
+                <div>
+                    <p class="font-medium">Yüklediğim dosyalar güvende mi?</p>
+                    <p class="text-gray-700 text-sm">Evet, tüm dosyalarınız gizli tutulur ve sadece analiz için kullanılır.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for report functionality
+        let currentReportData = null;
+        let currentReportFilename = null;
+        
+        // Function to generate comprehensive health report
+        async function generateComprehensiveReport(diseaseName, predictionType, event) {
+            console.log('generateComprehensiveReport called with:', diseaseName, predictionType);
+            try {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '⏳ Rapor Oluşturuluyor...';
+                button.disabled = true;
+                
+                console.log('Sending request to /generate_comprehensive_health_report');
+                const response = await fetch('/generate_comprehensive_health_report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        disease_name: diseaseName,
+                        prediction_type: predictionType
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    currentReportData = data.pdf_data;
+                    currentReportFilename = data.filename;
+                    
+                    // Show report preview
+                    document.getElementById('reportContent').innerHTML = data.report_text.replace(/\n/g, '<br>');
+                    document.getElementById('reportPreview').style.display = 'block';
+                    
+                    // Scroll to report preview
+                    document.getElementById('reportPreview').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Rapor oluşturulurken hata oluştu: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Rapor oluşturulurken bir hata oluştu.');
+            } finally {
+                const button = event.target;
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+        
+        // Function to show disease information
+        async function showDiseaseInfo(diseaseName) {
+            console.log('showDiseaseInfo called with:', diseaseName);
+            try {
+                const diseaseInfoDiv = document.getElementById('diseaseInfo');
+                diseaseInfoDiv.innerHTML = '<div class="animate-pulse"><div class="h-4 bg-green-200 rounded w-3/4 mb-2"></div><div class="h-4 bg-green-200 rounded w-1/2"></div></div>';
+                
+                console.log('Sending request to /get_disease_info');
+                const response = await fetch('/get_disease_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        disease_name: diseaseName
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    diseaseInfoDiv.innerHTML = `<p class="text-green-700 text-sm">${data.disease_info}</p>`;
+                } else {
+                    diseaseInfoDiv.innerHTML = '<p class="text-red-600 text-sm">Hastalık bilgisi alınamadı.</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('diseaseInfo').innerHTML = '<p class="text-red-600 text-sm">Hastalık bilgisi alınamadı.</p>';
+            }
+        }
+        
+        // Function to download report
+        async function downloadReport(event) {
+            if (!currentReportData) {
+                alert('İndirilecek rapor bulunamadı.');
+                return;
+            }
+            
+            try {
+                // İndirme butonunu devre dışı bırak
+                const downloadBtn = event.target;
+                const originalText = downloadBtn.textContent;
+                downloadBtn.textContent = '⏳ İndiriliyor...';
+                downloadBtn.disabled = true;
+                
+                const response = await fetch('/download_health_report_pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pdf_data: currentReportData,
+                        filename: currentReportFilename
+                    })
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    
+                    // Blob boyutunu kontrol et
+                    if (blob.size === 0) {
+                        throw new Error('PDF dosyası boş');
+                    }
+                    
+                    // Dosya indirme işlemi
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = currentReportFilename;
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    // Temizlik
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    }, 100);
+                    
+                    // Başarı mesajı
+                    alert('PDF başarıyla indirildi!');
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'PDF indirme hatası oluştu.');
+                }
+            } catch (error) {
+                console.error('PDF indirme hatası:', error);
+                alert('PDF indirme hatası: ' + error.message);
+            } finally {
+                // Butonu eski haline getir
+                const downloadBtn = event.target;
+                downloadBtn.textContent = originalText;
+                downloadBtn.disabled = false;
+            }
+        }
+        
+        // Function to close report preview
+        function closeReportPreview() {
+            document.getElementById('reportPreview').style.display = 'none';
+            currentReportData = null;
+            currentReportFilename = null;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Audio file handling and waveform visualization
+            const audioFileInput = document.getElementById('audioFile');
+            const waveformContainer = document.getElementById('waveformContainer');
+            let waveformChart = null;
+
+            audioFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        const arrayBuffer = e.target.result;
+                        
+                        audioContext.decodeAudioData(arrayBuffer, function(buffer) {
+                            // Get audio data
+                            const audioData = buffer.getChannelData(0);
+                            // Downsample the data to reduce points
+                            const downsampledData = [];
+                            const sampleRate = 100; // Adjust this value to control the number of points
+                            for (let i = 0; i < audioData.length; i += sampleRate) {
+                                downsampledData.push(audioData[i]);
+                            }
+
+                            // Show waveform container
+                            waveformContainer.style.display = 'block';
+
+                            // Create or update waveform chart
+                            if (waveformChart) {
+                                waveformChart.destroy();
+                            }
+
+                            waveformChart = new Chart(document.getElementById('waveformChart'), {
+                                type: 'line',
+                                data: {
+                                    labels: Array.from({length: downsampledData.length}, (_, i) => i),
+                                    datasets: [{
+                                        label: 'Ses Dalga Formu',
+                                        data: downsampledData,
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1,
+                                        pointRadius: 0,
+                                        fill: true,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)'
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        x: {
+                                            display: false
+                                        },
+                                        y: {
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Genlik'
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+            });
+
+            // Prediction statistics chart
+            const predictionStats = {{ prediction_stats|tojson }};
+            const predictionChart = new Chart(document.getElementById('predictionChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(predictionStats),
+                    datasets: [{
+                        label: 'Tahmin Sayısı',
+                        data: Object.values(predictionStats),
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Auto-load disease info when prediction result is available
+            {% if prediction_result %}
+            showDiseaseInfo('{{ prediction_result }}');
+            {% endif %}
+        });
+    </script>
+{% endblock %} 

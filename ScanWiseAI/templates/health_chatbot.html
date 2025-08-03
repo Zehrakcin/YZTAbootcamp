@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}ScanWiseAI - Gemini Yapay Zeka Sağlık Asistanı{% endblock %}
+
+{% block content %}
+    <style>
+        .chat-container {
+            height: calc(100vh - 220px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .message {
+            max-width: 80%;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: auto;
+            border-top-right-radius: 0;
+        }
+        .bot-message {
+            background-color: #f0f7ff;
+            margin-right: auto;
+            border-top-left-radius: 0;
+            border-left: 3px solid #4299e1;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }        .model-badge {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }    </style>
+
+    <div class="p-6">
+            <div class="bg-white shadow rounded-lg p-6">                <h1 class="text-2xl font-bold text-gray-900 mb-2">Gemini Türkçe Sağlık Asistanı</h1>
+                <p class="text-gray-600 mb-4">Tıbbi sorularınıza Türkçe yapay zeka destekli yanıtlar alın. Bu asistan bir doktor tavsiyesi yerine geçmez.</p>
+                
+                <!-- Chat Container -->                <div id="chatContainer" class="chat-container mb-4 p-4 bg-gray-50 rounded-lg">                    <div class="message bot-message">
+                        <span class="model-badge">GEMINI-AI</span>
+                        Merhaba! Ben ScanWiseAI Sağlık Asistanı. Google'ın en gelişmiş dil modeli Gemini ile çalışıyorum ve akciğer sağlığı konularında size kapsamlı yanıtlar sunabilirim. Astım, KOAH, bronşit, akciğer kanseri, öksürük, nefes darlığı, tüberküloz, plevral efüzyon gibi konularla ilgili sorularınızı yanıtlamak için buradayım. Ayrıca tedavi yöntemleri, belirtiler, risk faktörleri ve korunma yolları hakkında da bilgi verebilirim.
+                    </div>
+                    <div class="flex items-center justify-center my-4 text-sm">
+                        <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>Modelimiz sağlık sorularınıza kapsamlı yanıtlar oluşturmak için geliştirilmiştir. Sorularınızı ne kadar detaylı sorarsanız, o kadar spesifik ve faydalı bilgiler alabilirsiniz. Örneğin: "Öksürük ne zaman doktora gidilmeli?" veya "Astım hastaları nelere dikkat etmeli?" gibi.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Form -->
+                <form id="chatForm" class="flex flex-col gap-2">
+                    <div class="flex gap-2">
+                        <input type="text" id="messageInput" class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Sağlık sorunuz...">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">
+                            Gönder
+                        </button>
+                    </div>                    <div id="typingIndicator" class="hidden text-gray-500 text-sm ml-2">
+                        <span>Yapay zeka yanıt hazırlıyor...</span>
+                        <span class="dots">...</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>        document.addEventListener('DOMContentLoaded', function() {// Chat functionality
+            const chatForm = document.getElementById('chatForm');
+            const messageInput = document.getElementById('messageInput');
+            const chatContainer = document.getElementById('chatContainer');
+            const typingIndicator = document.getElementById('typingIndicator');
+
+            // CSS animasyon için stil ekle
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes typingAnimation {
+                    0% { content: '.'; }
+                    33% { content: '..'; }
+                    66% { content: '...'; }
+                    100% { content: ''; }
+                }
+                .dots {
+                    display: inline-block;
+                    width: 20px;
+                }
+                .dots::after {
+                    content: '';
+                    animation: typingAnimation 1.5s infinite;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Sohbet geçmişi
+            let chatHistory = [];
+
+            chatForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const message = messageInput.value.trim();
+                if (!message) return;
+
+                // Kullanıcı mesajını ekle
+                appendMessage(message, 'user');
+                messageInput.value = '';
+                chatHistory.push({ role: 'user', content: message });
+
+                // Gönder düğmesini devre dışı bırak
+                const submitButton = chatForm.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.classList.add('bg-gray-400');
+                submitButton.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                
+                // Yazma göstergesini göster
+                typingIndicator.classList.remove('hidden');
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+
+                    // Yazma göstergesini gizle
+                    typingIndicator.classList.add('hidden');
+
+                    const data = await response.json();
+                    
+                    if (data.error) {
+                        appendMessage('Bir hata oluştu. Lütfen tekrar deneyin.', 'bot');
+                    } else {
+                        appendMessage(data.response, 'bot');
+                        chatHistory.push({ role: 'assistant', content: data.response });
+                    }
+                } catch (error) {
+                    appendMessage('Bir hata oluştu. Lütfen tekrar deneyin.', 'bot');
+                    typingIndicator.classList.add('hidden');
+                } finally {
+                    // Gönder düğmesini yeniden etkinleştir
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('bg-gray-400');
+                    submitButton.classList.add('bg-blue-500', 'hover:bg-blue-600');
+                }
+            });            function appendMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                // Markdown formatını temizle
+                let formattedMessage = message
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Kalın yazı
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')  // İtalik yazı
+                    .replace(/\n\n/g, '<br><br>')  // Paragraf boşlukları
+                    .replace(/\n/g, '<br>')  // Tek satır boşlukları
+                    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-600 hover:underline">$1</a>');  // Linkler
+                
+                // Bot yanıtlarına model rozeti ekle
+                if (sender === 'bot') {
+                    const badgeSpan = document.createElement('span');
+                    badgeSpan.className = 'model-badge';
+                    badgeSpan.textContent = 'GEMINI-AI';
+                    messageDiv.appendChild(badgeSpan);
+                }
+                
+                messageDiv.innerHTML += formattedMessage;
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        });    </script>
+{% endblock %}

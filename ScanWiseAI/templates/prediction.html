@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}ScanWiseAI - Tahmin İşlemleri{% endblock %}
+
+{% block content %}
+    <div class="p-6">
+            <div class="bg-white shadow rounded-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Tahmin İşlemlerine Hoş Geldiniz</h2>
+                <p class="text-gray-700 mb-4">ScanWiseAI tahmin araçları ile göğüs hastalıklarının tespitine yardımcı oluyoruz. Farklı yöntemler kullanarak tahmin yapabilirsiniz. Başlamak için soldaki menüden bir seçenek belirleyin.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Yapay Zekanın Sağlık Alanındaki Rolü</h3>
+                    <p class="text-gray-700">Yapay zeka, sağlık sektöründe teşhis süreçlerini hızlandırarak, hastalıkların daha doğru ve erken tespit edilmesine olanak tanır. Görüntü analizi ve veri işleme yetenekleri sayesinde doktorlara değerli öngörüler sunar.</p>
+                </div>
+
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Erken Teşhisin Önemi</h3>
+                    <p class="text-gray-700">Birçok hastalıkta erken teşhis, tedavi başarısını önemli ölçüde artırır ve iyileşme sürecini hızlandırır. Yapay zeka destekli sistemler, hastalık belirtilerini erken evrelerde yakalayarak hayat kurtarabilir.</p>
+                </div>
+
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Kullanım Kılavuzu ve Gereksinimler</h3>
+                    <p class="text-gray-700 mb-2">Tahmin araçlarımızı kullanmak oldukça basittir. İlgili tahmin türü sayfasına gidin, istenen dosya (solunum sesi veya X-ray görüntüsü) formatında dosyanızı yükleyin ve 'Tahmin Yap' butonuna tıklayın.</p>
+                    <p class="text-gray-700">Desteklenen formatlar: Ses dosyaları için MP3, WAV; Görüntü dosyaları için JPG, PNG.</p>
+                </div>
+
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Sorumluluk Reddi</h3>
+                    <p class="text-gray-700">ScanWiseAI tarafından sağlanan tahmin sonuçları yalnızca bilgilendirme amaçlıdır ve tıbbi teşhis veya tedavi önerisi yerine geçmez. Herhangi bir sağlık sorunu için daima nitelikli bir sağlık uzmanına danışın.</p>
+                </div>
+
+                <div class="bg-white shadow rounded-lg p-6 md:col-span-2">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Veri Gizliliği ve Güvenliği</h3>
+                    <p class="text-gray-700">Kişisel verilerinizin ve yüklediğiniz dosyaların gizliliği bizim için önemlidir. Verileriniz güvenli sunucularda saklanır ve yalnızca tahmin işlemleri için kullanılır. Üçüncü taraflarla paylaşılmaz.</p>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- Toast for prediction responses -->
+    <div id="toast" class="hidden fixed top-4 right-4 bg-green-500 text-white p-4 rounded-md shadow-lg z-50">
+        <span id="toast-message"></span>
+        <button onclick="hideToast()" class="ml-4 text-white focus:outline-none">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            toast.className = isSuccess 
+                ? 'fixed top-4 right-4 bg-green-500 text-white p-4 rounded-md shadow-lg z-50' 
+                : 'fixed top-4 right-4 bg-red-500 text-white p-4 rounded-md shadow-lg z-50';
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                hideToast();
+            }, 5000);
+        }
+
+        function hideToast() {
+            document.getElementById('toast').classList.add('hidden');
+        }
+    </script>
+{% endblock %}

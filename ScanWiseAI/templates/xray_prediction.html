@@ -1,0 +1,513 @@
+{% extends 'base.html' %}
+
+{% block title %}ScanWiseAI - X-ray ile Hastalık Tespiti{% endblock %}
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="p-6">
+            <!-- Kısa Açıklama ve Bilgilendirme -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">X-ray ile Hastalık Tespiti</h2>
+                <p class="text-gray-700 mb-2">Bu modül, yüklediğiniz X-ray görüntüsünü analiz ederek aşağıdaki hastalıkların tespitine yardımcı olur:</p>
+                <ul class="list-disc list-inside text-gray-700 mb-2">
+                    <li>Sağlıklı</li>
+                    <li>Konjenital Anomali</li>
+                    <li>KOAH</li>
+                    <li>Mediastinal Kitle</li>
+                    <li>Plevral Efüzyon</li>
+                    <li>Akciğer İltihabı</li>
+                    <li>Akciğer Sönmesi (Pneumotorax)</li>
+                    <li>Tüberküloz</li>
+                    <li>Akciğer Tümörü</li>
+                </ul>
+                <p class="text-gray-600">Yapay zeka destekli analiz ile erken teşhis ve tedavi şansınızı artırın.</p>
+            </div>
+
+            <!-- Örnek Dosya veya Demo -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+                <span class="text-blue-700 font-medium">Sistemi denemek için örnek X-ray görüntülerini indirebilirsiniz.</span>
+                <a href="/static/demo/ornek_xray.zip" download class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">Örnek Dosya İndir</a>
+            </div>
+
+            <!-- Tahmin Formu -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <form action="" method="post" enctype="multipart/form-data" class="space-y-4" id="predictionForm">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">X-ray Görüntüsü</label>
+                        <input type="file" name="file" accept="image/*" class="mt-1 block w-full" required id="xrayFile">
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        Tahmin Yap
+                    </button>
+                </form>
+            </div>
+
+            <!-- X-ray Görüntü Önizleme -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6" id="previewContainer" style="display: none;">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">X-ray Görüntü Önizleme</h3>
+                <div class="relative max-w-lg mx-auto border-2 border-gray-200 rounded-lg overflow-hidden">
+                    <img id="xrayPreview" class="w-full h-auto max-h-96 object-contain bg-gray-50" alt="X-ray Önizleme">
+                </div>
+                <p class="text-sm text-gray-500 text-center mt-2" id="imageInfo"></p>
+            </div>
+
+            <!-- Tahmin Sonucu Açıklama Alanı (Dinamik) -->
+            {% if prediction_result %}
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-semibold text-green-800 mb-2">Tahmin Sonucu</h3>
+                <p class="text-green-700 mb-1">Tespit Edilen: <span class="font-bold">{{ prediction_result }}</span></p>
+                
+                <!-- Dinamik Hastalık Bilgisi -->
+                <div id="diseaseInfo" class="mt-3">
+                    <div class="animate-pulse">
+                        <div class="h-4 bg-green-200 rounded w-3/4 mb-2"></div>
+                        <div class="h-4 bg-green-200 rounded w-1/2"></div>
+                    </div>
+                </div>
+                
+                <!-- Sağlık Asistanı Rapor Butonları -->
+                <div class="mt-4 space-y-2">
+                    <button onclick="generateComprehensiveReport('{{ prediction_result }}', 'X-ray Görüntü Analizi')" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+                        📋 Detaylı Sağlık Raporu Oluştur
+                    </button>
+                    <button onclick="showDiseaseInfo('{{ prediction_result }}')" 
+                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+                        ℹ️ Hastalık Hakkında Bilgi Al
+                    </button>
+                </div>
+                
+                <!-- Rapor Önizleme Alanı -->
+                <div id="reportPreview" class="mt-4 p-4 bg-white rounded-lg border border-gray-200" style="display: none;">
+                    <h4 class="font-semibold text-gray-800 mb-2">Rapor Önizleme</h4>
+                    <div id="reportContent" class="text-sm text-gray-700 max-h-40 overflow-y-auto"></div>
+                    <div class="mt-3 flex space-x-2">
+                        <button onclick="downloadReport()" 
+                                class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-medium">
+                            📥 PDF İndir
+                        </button>
+                        <button onclick="closeReportPreview()" 
+                                class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs font-medium">
+                            ✕ Kapat
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Yükleme ve Sonuç Geçmişi -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Yükleme ve Sonuç Geçmişi</h3>
+                {% if prediction_history %}
+                <table class="min-w-full text-left text-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4">Tarih</th>
+                            <th class="py-2 px-4">Dosya Adı</th>
+                            <th class="py-2 px-4">Sonuç</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prediction in prediction_history %}
+                        <tr class="border-t">
+                            <td class="py-2 px-4">{{ prediction.prediction_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td class="py-2 px-4">{{ prediction.filename }}</td>
+                            <td class="py-2 px-4">{{ prediction.prediction_result }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-gray-600">Henüz tahmin geçmişi bulunmamaktadır.</p>
+                {% endif %}
+            </div>
+
+            <!-- Tahmin İstatistikleri -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tahmin İstatistikleri</h3>
+                <div class="h-64">
+                    <canvas id="predictionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Sıkça Sorulan Sorular (SSS) -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Sıkça Sorulan Sorular</h3>
+                <div class="mb-2">
+                    <p class="font-medium">X-ray görüntüsü nasıl yüklemeliyim?</p>
+                    <p class="text-gray-700 text-sm">Dijital X-ray görüntünüzü JPG veya PNG formatında yükleyebilirsiniz. Görüntü kalitesi yüksek olmalıdır.</p>
+                </div>
+                <div class="mb-2">
+                    <p class="font-medium">Hangi hastalıklar tespit edilebilir?</p>
+                    <p class="text-gray-700 text-sm">Sağlıklı, Konjenital Anomali, KOAH, Mediastinal Kitle, Plevral Efüzyon, Akciğer İltihabı, Akciğer Sönmesi (Pneumotorax), Tüberküloz ve Akciğer Tümörü.</p>
+                </div>
+                <div class="mb-2">
+                    <p class="font-medium">Sonuçlar ne kadar güvenilir?</p>
+                    <p class="text-gray-700 text-sm">Yapay zeka modellerimiz yüksek doğruluk oranına sahiptir, ancak sonuçlar kesin tıbbi teşhis yerine geçmez.</p>
+                </div>
+                <div>
+                    <p class="font-medium">Yüklediğim görüntüler güvende mi?</p>
+                    <p class="text-gray-700 text-sm">Evet, tüm görüntüleriniz gizli tutulur ve sadece analiz için kullanılır.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar toggle code - null kontrolleri ile güvenli hale getirildi
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            
+            // Sidebar elementlerinin varlığını kontrol et ve sadece varsa işlem yap
+            if (sidebar && mainContent && sidebarToggle) {
+                try {
+                    // Sidebar durumunu localStorage'dan al
+                    const savedState = localStorage.getItem('sidebarState');
+                    let isSidebarCollapsed = savedState === 'collapsed';
+
+                    function updateSidebar() {
+                        if (sidebar && mainContent && sidebarToggle) {
+                            sidebar.classList.toggle('collapsed', isSidebarCollapsed);
+                            mainContent.classList.toggle('expanded', isSidebarCollapsed);
+                            sidebarToggle.classList.toggle('collapsed', isSidebarCollapsed);
+                            localStorage.setItem('sidebarState', isSidebarCollapsed ? 'collapsed' : 'expanded');
+                        }
+                    }
+
+                    sidebarToggle.addEventListener('click', () => {
+                        isSidebarCollapsed = !isSidebarCollapsed;
+                        updateSidebar();
+                    });
+
+                    updateSidebar();
+                } catch (error) {
+                    console.error('Sidebar işlevinde hata:', error);
+                }
+            } else {
+                console.warn('Sidebar elementlerinden biri veya birkaçı bulunamadı - bu normal olabilir');
+            }
+
+            // X-ray image preview handling - güvenli null kontrolleri ile
+            const xrayFileInput = document.getElementById('xrayFile');
+            const previewContainer = document.getElementById('previewContainer');
+            const xrayPreview = document.getElementById('xrayPreview');
+            const imageInfo = document.getElementById('imageInfo');
+
+            // Elementlerin varlığını kontrol et
+            if (!xrayFileInput) {
+                console.error('xrayFile input elementi bulunamadı!');
+                return;
+            }
+            if (!previewContainer) {
+                console.error('previewContainer elementi bulunamadı!');
+                return;
+            }
+            if (!xrayPreview) {
+                console.error('xrayPreview img elementi bulunamadı!');
+                return;
+            }
+            if (!imageInfo) {
+                console.error('imageInfo elementi bulunamadı!');
+                return;
+            }
+
+            // Dosya input event listener'ını güvenli şekilde ekle
+            try {
+                xrayFileInput.addEventListener('change', function(e) {
+                    console.log('File input changed'); // Debug log
+                    const file = e.target.files[0];
+                    console.log('Selected file:', file); // Debug log
+                    
+                    if (file) {
+                        // Dosya türü kontrolü
+                        if (!file.type.startsWith('image/')) {
+                            alert('Lütfen geçerli bir görüntü dosyası seçin.');
+                            return;
+                        }
+                        
+                        console.log('File is valid image'); // Debug log
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            try {
+                                console.log('FileReader loaded'); // Debug log
+                                xrayPreview.src = e.target.result;
+                                previewContainer.style.display = 'block';
+                                
+                                // Dosya bilgilerini göster
+                                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                                imageInfo.textContent = `Dosya: ${file.name} | Boyut: ${fileSize} MB | Tip: ${file.type}`;
+                                console.log('Preview updated'); // Debug log
+                            } catch (error) {
+                                console.error('Görüntü önizleme hatası:', error);
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        console.log('No file selected'); // Debug log
+                        previewContainer.style.display = 'none';
+                        imageInfo.textContent = '';
+                    }
+                });
+            } catch (error) {
+                console.error('File input event listener eklenirken hata:', error);
+            }
+
+            // Prediction statistics chart
+            try {
+                const predictionStats = {{ prediction_stats|tojson|safe }};
+                console.log('Prediction Stats:', predictionStats);
+                
+                // Chart'ı oluştur
+                const chartCanvas = document.getElementById('predictionChart');
+                
+                if (chartCanvas) {
+                    // Veri kontrolü - hem obje var mı hem de içinde değer var mı
+                    const hasData = predictionStats && 
+                                   typeof predictionStats === 'object' && 
+                                   Object.keys(predictionStats).length > 0 && 
+                                   Object.values(predictionStats).some(val => val > 0);
+                    
+                    if (hasData) {
+                        // Sadece 0'dan büyük değerleri filtrele
+                        const filteredStats = {};
+                        Object.keys(predictionStats).forEach(key => {
+                            if (predictionStats[key] > 0) {
+                                filteredStats[key] = predictionStats[key];
+                            }
+                        });
+                        
+                        if (Object.keys(filteredStats).length > 0) {
+                            const predictionChart = new Chart(chartCanvas, {
+                                type: 'bar',
+                                data: {
+                                    labels: Object.keys(filteredStats),
+                                    datasets: [{
+                                        label: 'Tahmin Sayısı',
+                                        data: Object.values(filteredStats),
+                                        backgroundColor: [
+                                            'rgba(54, 162, 235, 0.8)',
+                                            'rgba(255, 99, 132, 0.8)',
+                                            'rgba(75, 192, 192, 0.8)',
+                                            'rgba(255, 206, 86, 0.8)',
+                                            'rgba(153, 102, 255, 0.8)',
+                                            'rgba(255, 159, 64, 0.8)',
+                                            'rgba(201, 203, 207, 0.8)',
+                                            'rgba(83, 102, 255, 0.8)',
+                                            'rgba(255, 99, 255, 0.8)'
+                                        ],
+                                        borderColor: [
+                                            'rgba(54, 162, 235, 1)',
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(255, 206, 86, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)',
+                                            'rgba(201, 203, 207, 1)',
+                                            'rgba(83, 102, 255, 1)',
+                                            'rgba(255, 99, 255, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                stepSize: 1
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'X-ray Tahmin İstatistikleri'
+                                        }
+                                    }
+                                }
+                            });
+                        } else {
+                            // Filtrelenmiş veri yoksa
+                            chartCanvas.style.display = 'none';
+                            const chartContainer = chartCanvas.parentElement;
+                            chartContainer.innerHTML = '<p class="text-gray-500 text-center">Henüz tahmin verisi bulunmamaktadır.</p>';
+                        }
+                    } else {
+                        // Eğer veri yoksa boş chart mesajı göster
+                        chartCanvas.style.display = 'none';
+                        const chartContainer = chartCanvas.parentElement;
+                        chartContainer.innerHTML = '<p class="text-gray-500 text-center">Henüz tahmin verisi bulunmamaktadır.</p>';
+                    }
+                } else {
+                    console.error('Chart canvas element bulunamadı!');
+                }
+            } catch (error) {
+                console.error('Chart oluşturulurken hata:', error);
+            }
+        });
+        
+        // Global variables for report functionality
+        let currentReportData = null;
+        let currentReportFilename = null;
+        
+        // Function to generate comprehensive health report
+        async function generateComprehensiveReport(diseaseName, predictionType) {
+            try {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '⏳ Rapor Oluşturuluyor...';
+                button.disabled = true;
+                
+                const response = await fetch('/generate_comprehensive_health_report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        disease_name: diseaseName,
+                        prediction_type: predictionType
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentReportData = data.pdf_data;
+                    currentReportFilename = data.filename;
+                    
+                    // Show report preview
+                    document.getElementById('reportContent').innerHTML = data.report_text.replace(/\n/g, '<br>');
+                    document.getElementById('reportPreview').style.display = 'block';
+                    
+                    // Scroll to report preview
+                    document.getElementById('reportPreview').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('Rapor oluşturulurken hata oluştu: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Rapor oluşturulurken bir hata oluştu.');
+            } finally {
+                const button = event.target;
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+        
+        // Function to show disease information
+        async function showDiseaseInfo(diseaseName) {
+            try {
+                const diseaseInfoDiv = document.getElementById('diseaseInfo');
+                diseaseInfoDiv.innerHTML = '<div class="animate-pulse"><div class="h-4 bg-green-200 rounded w-3/4 mb-2"></div><div class="h-4 bg-green-200 rounded w-1/2"></div></div>';
+                
+                const response = await fetch('/get_disease_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        disease_name: diseaseName
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    diseaseInfoDiv.innerHTML = `<p class="text-green-700 text-sm">${data.disease_info}</p>`;
+                } else {
+                    diseaseInfoDiv.innerHTML = '<p class="text-red-600 text-sm">Hastalık bilgisi alınamadı.</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('diseaseInfo').innerHTML = '<p class="text-red-600 text-sm">Hastalık bilgisi alınamadı.</p>';
+            }
+        }
+        
+        // Function to download report
+        async function downloadReport() {
+            if (!currentReportData) {
+                alert('İndirilecek rapor bulunamadı.');
+                return;
+            }
+            
+            try {
+                // İndirme butonunu devre dışı bırak
+                const downloadBtn = event.target;
+                const originalText = downloadBtn.textContent;
+                downloadBtn.textContent = '⏳ İndiriliyor...';
+                downloadBtn.disabled = true;
+                
+                const response = await fetch('/download_health_report_pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pdf_data: currentReportData,
+                        filename: currentReportFilename
+                    })
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    
+                    // Blob boyutunu kontrol et
+                    if (blob.size === 0) {
+                        throw new Error('PDF dosyası boş');
+                    }
+                    
+                    // Dosya indirme işlemi
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = currentReportFilename;
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    // Temizlik
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    }, 100);
+                    
+                    // Başarı mesajı
+                    alert('PDF başarıyla indirildi!');
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'PDF indirme hatası oluştu.');
+                }
+            } catch (error) {
+                console.error('PDF indirme hatası:', error);
+                alert('PDF indirme hatası: ' + error.message);
+            } finally {
+                // Butonu eski haline getir
+                const downloadBtn = event.target;
+                downloadBtn.textContent = originalText;
+                downloadBtn.disabled = false;
+            }
+        }
+        
+        // Function to close report preview
+        function closeReportPreview() {
+            document.getElementById('reportPreview').style.display = 'none';
+            currentReportData = null;
+            currentReportFilename = null;
+        }
+        
+        // Auto-load disease info when prediction result is available
+        {% if prediction_result %}
+        document.addEventListener('DOMContentLoaded', function() {
+            showDiseaseInfo('{{ prediction_result }}');
+        });
+        {% endif %}
+
+    </script>
+{% endblock %} 

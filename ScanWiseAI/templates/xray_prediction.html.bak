@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% block title %}LungSight - X-ray ile Hastalık Tespiti{% endblock %}
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="p-6">
+            <!-- Kısa Açıklama ve Bilgilendirme -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">X-ray ile Hastalık Tespiti</h2>
+                <p class="text-gray-700 mb-2">Bu modül, yüklediğiniz X-ray görüntüsünü analiz ederek aşağıdaki hastalıkların tespitine yardımcı olur:</p>
+                <ul class="list-disc list-inside text-gray-700 mb-2">
+                    <li>Sağlıklı</li>
+                    <li>Konjenital Anomali</li>
+                    <li>KOAH</li>
+                    <li>Mediastinal Kitle</li>
+                    <li>Plevral Efüzyon</li>
+                    <li>Akciğer İltihabı</li>
+                    <li>Akciğer Sönmesi (Pneumotorax)</li>
+                    <li>Tüberküloz</li>
+                    <li>Akciğer Tümörü</li>
+                </ul>
+                <p class="text-gray-600">Yapay zeka destekli analiz ile erken teşhis ve tedavi şansınızı artırın.</p>
+            </div>
+
+            <!-- Örnek Dosya veya Demo -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+                <span class="text-blue-700 font-medium">Sistemi denemek için örnek X-ray görüntülerini indirebilirsiniz.</span>
+                <a href="/static/demo/ornek_xray.zip" download class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">Örnek Dosya İndir</a>
+            </div>
+
+            <!-- Tahmin Formu -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <form action="" method="post" enctype="multipart/form-data" class="space-y-4" id="predictionForm">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">X-ray Görüntüsü</label>
+                        <input type="file" name="file" accept="image/*" class="mt-1 block w-full" required id="xrayFile">
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        Tahmin Yap
+                    </button>
+                </form>
+            </div>
+
+            <!-- X-ray Görüntü Önizleme -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6" id="previewContainer" style="display: none;">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">X-ray Görüntü Önizleme</h3>
+                <div class="relative aspect-[4/3] max-w-lg mx-auto">
+                    <img id="xrayPreview" class="w-full h-full object-contain" alt="X-ray Önizleme">
+                </div>
+            </div>
+
+            <!-- Tahmin Sonucu Açıklama Alanı (Dinamik) -->
+            {% if prediction_result %}
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-semibold text-green-800 mb-2">Tahmin Sonucu</h3>
+                <p class="text-green-700 mb-1">Tespit Edilen: <span class="font-bold">{{ prediction_result }}</span></p>
+                {% if prediction_result == 'Sağlıklı' %}
+                <p class="text-green-700 text-sm">X-ray görüntünüzde hastalık bulgusuna rastlanmamıştır.</p>
+                {% elif prediction_result == 'Konjenital Anomali' %}
+                <p class="text-green-700 text-sm">Konjenital anomali, doğuştan gelen yapısal bozuklukları ifade eder. Detaylı değerlendirme için uzman görüşü önerilir.</p>
+                {% elif prediction_result == 'KOAH' %}
+                <p class="text-green-700 text-sm">KOAH, akciğerlerdeki hava akışının kısıtlanmasıyla seyreden kronik bir hastalıktır. Sigara en önemli risk faktörüdür.</p>
+                {% elif prediction_result == 'Mediastinal Kitle' %}
+                <p class="text-green-700 text-sm">Mediastinal kitle, göğüs boşluğunda anormal doku büyümesidir. Acil değerlendirme gerektirebilir.</p>
+                {% elif prediction_result == 'Plevral Efüzyon' %}
+                <p class="text-green-700 text-sm">Plevral efüzyon, akciğer zarı ile göğüs duvarı arasında sıvı birikmesidir. Altta yatan nedenin araştırılması gerekir.</p>
+                {% elif prediction_result == 'Akciğer İltihabı' %}
+                <p class="text-green-700 text-sm">Akciğer iltihabı (pnömoni), akciğer dokusunun enfeksiyonudur. Erken teşhis ve tedavi önemlidir.</p>
+                {% elif prediction_result == 'Akciğer Sönmesi (Pneumotorax)' %}
+                <p class="text-green-700 text-sm">Akciğer sönmesi, akciğer ile göğüs duvarı arasına hava girmesi durumudur. Acil müdahale gerektirebilir.</p>
+                {% elif prediction_result == 'Tüberküloz' %}
+                <p class="text-green-700 text-sm">Tüberküloz, Mycobacterium tuberculosis bakterisinin neden olduğu bulaşıcı bir hastalıktır. Uzun süreli tedavi gerektirir.</p>
+                {% elif prediction_result == 'Akciğer Tümörü' %}
+                <p class="text-green-700 text-sm">Akciğer tümörü, akciğer dokusunda anormal hücre büyümesidir. Erken teşhis ve tedavi hayati önem taşır.</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Yükleme ve Sonuç Geçmişi -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Yükleme ve Sonuç Geçmişi</h3>
+                {% if prediction_history %}
+                <table class="min-w-full text-left text-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4">Tarih</th>
+                            <th class="py-2 px-4">Dosya Adı</th>
+                            <th class="py-2 px-4">Sonuç</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prediction in prediction_history %}
+                        <tr class="border-t">
+                            <td class="py-2 px-4">{{ prediction.prediction_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td class="py-2 px-4">{{ prediction.filename }}</td>
+                            <td class="py-2 px-4">{{ prediction.prediction_result }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-gray-600">Henüz tahmin geçmişi bulunmamaktadır.</p>
+                {% endif %}
+            </div>
+
+            <!-- Tahmin İstatistikleri -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tahmin İstatistikleri</h3>
+                {% if prediction_stats %}
+                <div class="h-64">
+                    <canvas id="predictionChart"></canvas>
+                </div>
+                {% else %}
+                <p class="text-gray-600">Henüz tahmin istatistiği bulunmamaktadır.</p>
+                {% endif %}
+            </div>
+
+            <!-- Sıkça Sorulan Sorular (SSS) -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Sıkça Sorulan Sorular</h3>
+                <div class="mb-2">
+                    <p class="font-medium">X-ray görüntüsü nasıl yüklemeliyim?</p>
+                    <p class="text-gray-700 text-sm">Dijital X-ray görüntünüzü JPG veya PNG formatında yükleyebilirsiniz. Görüntü kalitesi yüksek olmalıdır.</p>
+                </div>
+                <div class="mb-2">
+                    <p class="font-medium">Hangi hastalıklar tespit edilebilir?</p>
+                    <p class="text-gray-700 text-sm">Sağlıklı, Konjenital Anomali, KOAH, Mediastinal Kitle, Plevral Efüzyon, Akciğer İltihabı, Akciğer Sönmesi (Pneumotorax), Tüberküloz ve Akciğer Tümörü.</p>
+                </div>
+                <div class="mb-2">
+                    <p class="font-medium">Sonuçlar ne kadar güvenilir?</p>
+                    <p class="text-gray-700 text-sm">Yapay zeka modellerimiz yüksek doğruluk oranına sahiptir, ancak sonuçlar kesin tıbbi teşhis yerine geçmez.</p>
+                </div>
+                <div>
+                    <p class="font-medium">Yüklediğim görüntüler güvende mi?</p>
+                    <p class="text-gray-700 text-sm">Evet, tüm görüntüleriniz gizli tutulur ve sadece analiz için kullanılır.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar toggle code
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            
+            // Sidebar durumunu localStorage'dan al
+            const savedState = localStorage.getItem('sidebarState');
+            let isSidebarCollapsed = savedState === 'collapsed';
+
+            function updateSidebar() {
+                sidebar.classList.toggle('collapsed', isSidebarCollapsed);
+                mainContent.classList.toggle('expanded', isSidebarCollapsed);
+                sidebarToggle.classList.toggle('collapsed', isSidebarCollapsed);
+                localStorage.setItem('sidebarState', isSidebarCollapsed ? 'collapsed' : 'expanded');
+            }
+
+            sidebarToggle.addEventListener('click', () => {
+                isSidebarCollapsed = !isSidebarCollapsed;
+                updateSidebar();
+            });
+
+            updateSidebar();
+
+            // X-ray image preview handling
+            const xrayFileInput = document.getElementById('xrayFile');
+            const previewContainer = document.getElementById('previewContainer');
+            const xrayPreview = document.getElementById('xrayPreview');
+
+            xrayFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        xrayPreview.src = e.target.result;
+                        previewContainer.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewContainer.style.display = 'none';
+                }
+            });
+
+            // Prediction statistics chart
+            const predictionStats = {{ prediction_stats|tojson }};
+            
+            // Tahmin istatistiklerini göster
+            const chartCanvas = document.getElementById('predictionChart');
+            if (chartCanvas) {
+                const predictionChart = new Chart(chartCanvas, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(predictionStats),
+                    datasets: [{
+                        label: 'Tahmin Sayısı',
+                        data: Object.values(predictionStats),
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            }
+        });
+    </script>
+{% endblock %} 

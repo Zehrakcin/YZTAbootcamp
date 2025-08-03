@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ScanWiseAI - Yapay Zeka Destekli Göğüs Hastalıkları Tespiti{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }        .sidebar {
+            transition: all 0.3s ease-in-out;
+            width: 16rem;
+            will-change: transform, width;
+            overflow-y: auto !important;  /* Scrollbar'ı zorla göster */
+            height: 100vh;  /* Tam ekran yüksekliği */
+            max-height: 100vh;  /* Maksimum yüksekliği sınırla */
+            padding-bottom: 60px; /* Alt kısımda extra alan bırak */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Sidebar menü içeriği için ayrıca overflow kontrolü */
+        .sidebar > div {
+            flex-shrink: 0;
+        }
+        
+        /* Raporları Görüntüle öğesini vurgula */
+        .view-reports-link {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Son öğeleri daha belirgin yap */
+        .sidebar .border-t:last-of-type {
+            margin-top: 5px; 
+        }
+        
+        .translate-x-\[-100\%\] {
+            transform: translateX(-100%);
+        }
+        .ml-0 {
+            margin-left: 0;
+        }
+        .ml-64 {
+            margin-left: 16rem;
+        }
+        #sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flex-1 {
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: margin-left;
+        }        .model-badge {
+            display: inline-block;
+            background-color: #4f46e5;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+        }
+          /* Scrollbar Stilleri */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            display: block !important;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            visibility: visible !important;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #c1c1c1;
+            border-radius: 10px;
+            visibility: visible !important;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #a8a8a8;
+        }
+        
+        /* Firefox için scrollbar stilleri */
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #c1c1c1 #f1f1f1;
+            overflow-y: auto !important;
+            -ms-overflow-style: auto !important;  /* IE ve Edge için */
+        }
+    </style>
+    {% block additional_styles %}{% endblock %}
+    {% block head_scripts %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    {% block navbar %}
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="text-2xl font-bold text-blue-600">LungSight</a>
+                </div>
+                <div class="flex items-center">
+                    {% if current_user.is_authenticated %}
+                        <span class="text-gray-700 mr-4">Hoş geldiniz, {{ current_user.name }}</span>
+                        <a href="{{ url_for('index') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium mr-2">Ana Sayfa</a>
+                        <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">Çıkış Yap</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                            Giriş Yap
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        {% if current_user.is_authenticated %}
+            {% include 'sidebar.html' %}
+            
+            <!-- Sidebar Toggle için Yedek Buton (Mobilde veya sidebar kapandığında) -->
+            <button id="fallbackSidebarToggle" onclick="window.openSidebarManually()" 
+                class="fixed z-50 bottom-4 right-4 lg:hidden hidden bg-blue-600 text-white p-3 rounded-full shadow-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        {% endif %}
+
+        <!-- Main Content -->
+        <div id="mainContent" class="flex-1 {% if current_user.is_authenticated %}ml-64{% endif %} pb-12 overflow-auto">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {% block footer %}
+    <footer class="bg-white py-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm">© 2025 LungSight. Tüm hakları saklıdır.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    
+    {% block body_scripts %}{% endblock %}
+    
+    <!-- Global Sidebar Kontrolleri -->
+    <script>
+        // Sidebar ile ilgili global fonksiyonlar
+        window.checkAndFixSidebar = function() {
+            try {
+                console.log('Global sidebar kontrolü çalışıyor...');
+                const sidebar = document.getElementById('sidebar');
+                const floatingToggle = document.getElementById('floatingSidebarToggle');
+                const fallbackToggle = document.getElementById('fallbackSidebarToggle');
+                
+                if (!sidebar) {
+                    console.error('Sidebar elementi bulunamadı');
+                    return;
+                }
+                
+                // Sidebar'ın kaydırılabilir olduğundan emin ol
+                if (sidebar.clientHeight < sidebar.scrollHeight) {
+                    sidebar.style.overflowY = 'auto';
+                    console.log('Sidebar scroll aktifleştirildi');
+                }
+                
+                // "Raporları Görüntüle" elementini görünür kılmak için
+                const viewReportsLink = document.querySelector('.view-reports-link');
+                if (viewReportsLink) {
+                    // Sayfa yüklendiğinde en son menü öğesinin görünür olduğundan emin ol
+                    setTimeout(() => {
+                        viewReportsLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 300);
+                }
+                
+                // Sidebar kapalıysa ve floating buton görünmüyorsa düzelt
+                const isSidebarClosed = sidebar.classList.contains('translate-x-[-100%]');
+                const isFloatingHidden = !floatingToggle || floatingToggle.classList.contains('hidden');
+                const isFloatingStyleHidden = floatingToggle ? window.getComputedStyle(floatingToggle).display === 'none' : true;
+                
+                if ((isSidebarClosed && (isFloatingHidden || isFloatingStyleHidden)) && fallbackToggle) {
+                    console.log('Sidebar durumu düzeltiliyor: Yedek buton gösteriliyor');
+                    fallbackToggle.classList.remove('hidden');
+                }
+                
+                // Global acil fonksiyonu tanımla (her sayfada kullanılabilir)
+                if (!window.openSidebarManually && typeof window.lungsightSidebar === 'undefined') {
+                    console.log('Acil sidebar fonksiyonu tanımlanıyor');
+                    window.openSidebarManually = function() {
+                        if (sidebar) {
+                            sidebar.classList.remove('translate-x-[-100%]');
+                            if (fallbackToggle) fallbackToggle.classList.add('hidden');
+                            
+                            const mainContent = document.getElementById('mainContent') || document.querySelector('.flex-1');
+                            if (mainContent) {
+                                mainContent.classList.add('ml-64');
+                                mainContent.classList.remove('ml-0');
+                            }
+                            
+                            localStorage.setItem('sidebarClosed', 'false');
+                        }
+                    };
+                }
+            } catch (e) {
+                console.error('Sidebar kontrol hatası:', e);
+            }
+        };
+        
+        // Sayfa yüklenirken ve tamamen yüklendiğinde kontroller yap
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(window.checkAndFixSidebar, 300);
+        });
+        
+        window.addEventListener('load', function() {
+            // Çoklu kontroller yaparak her durumda çalışmasını sağla
+            setTimeout(window.checkAndFixSidebar, 500);
+            setTimeout(window.checkAndFixSidebar, 1500);
+            setTimeout(window.checkAndFixSidebar, 3000);
+        });
+        
+        // Sayfa değişikliklerini de izle
+        window.addEventListener('resize', function() {
+            window.checkAndFixSidebar();
+        });
+        
+        // 5 saniyede bir sidebar kontrolü yap (sayfa etkileşimleri için)
+        setInterval(window.checkAndFixSidebar, 5000);
+    </script>
+</body>
+</html>
