@@ -158,3 +158,5 @@ Test süreçleri sprint sonuna sıkıştığı için yeterli kapsamda gerçekle�
 
 
 ---
+
+Bu sprintte, projenin odaklandığı medikal görüntü analizi kısmında önemli ilerlemeler kaydedildi. Özellikle akciğer hastalıklarının tespitine yönelik olarak röntgen ve tomografi görüntüleri üzerinde çalışan yapay zekâ modeli geliştirildi ve test edildi. Modelin zatürre, nodül ve benzeri bulguları ayırt edebilme kabiliyeti artırıldı. Ayrıca sistemin kullanıcı arayüzüne entegre edilen chatbox modülüyle birlikte, analiz sonuçlarının sade ve anlaşılır bir şekilde sunulması sağlandı. Böylece hem sağlık çalışanları hem de hastalar için faydalı bir destek sistemi oluşturma yolunda somut adımlar atıldı.
