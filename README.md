@@ -97,8 +97,44 @@ Sistem sayesinde kullanıcılar sırasıyla:
 
 ## *Sprint 3*
 
+
+## *Product Backlog*
+Yeni Eklenen Özellikler:
+
+Akciğer hastalıklarına özel yapay zekâ modelinin entegrasyonu
+Görüntü analizi sonucuna göre teknik ve sadeleştirilmiş açıklamaların oluşturulması
+
+## *Daily Scrum*
+![WhatsApp Image 2025-08-03 at 23 35 54](https://github.com/user-attachments/assets/6a87777f-9983-4d40-a8c2-0b6b366d41e8)
+![WhatsApp Image 2025-08-03 at 23 35 54 (1)](https://github.com/user-attachments/assets/147d5679-3eb5-45ea-a5a0-a97333dedff5)
+![WhatsApp Image 2025-08-03 at 23 35 54 (2)](https://github.com/user-attachments/assets/d82ee851-f48c-4cb2-874d-823c3a55d99b)
+![WhatsApp Image 2025-08-03 at 23 35 54 (3)](https://github.com/user-attachments/assets/162a757c-86dd-4a28-97db-38235eff1384)
+Ekip ile WhatsApp üzerinden sürdürülen iletişim sayesinde projede ilerleme kaydedilmiştir.
+
+## *Sprint Review*
+Yapay zekâ tabanlı analiz sistemi geliştirildi ve sadece akciğer hastalıklarına odaklanacak şekilde optimize edildi.
+Kullanıcıların analiz sonucuyla ilgili doğal dilde sorular sorabileceği chatbot modülü sisteme entegre edildi.
+
+
+## *Sprint Retrospective*
+Neler iyi gitti?
+
+Yapay zekâ entegrasyonu sorunsuz bir şekilde gerçekleştirildi.
+Takım içi iletişim ve görev paylaşımı etkiliydi, gecikme yaşanmadı.
+Chatbot özelliği başarıyla geliştirildi ve analiz sistemiyle entegre edildi.
+Demo sunumunda proje açık ve anlaşılır bir şekilde temsil edildi.
+
+Neler geliştirilebilir?
+
+Chatbot’un yanıt kalitesi zaman zaman tutarsızlık gösterdi, NLP çıktıları üzerinde daha fazla test yapılmalı.
+Arayüz bileşenlerinde görsel tutarlılık eksikleri gözlemlendi (örneğin buton hizalamaları, yazı tipi farklılıkları).
+Test süreçleri sprint sonuna sıkıştığı için yeterli kapsamda gerçekleştirilemedi.
+
+
 ## *Trello*
   <img width="1116" height="499" alt="Ekran Resmi 2025-08-03 23 04 47" src="https://github.com/user-attachments/assets/be6d0c6a-2d1d-4f57-98ff-12219a1585cc" />
+
+  
   
 ### *Arayüzün Temel Görüntüsü*
 <img width="1418" height="670" alt="Ekran Resmi 2025-08-03 23 12 58" src="https://github.com/user-attachments/assets/ca5f7deb-dd55-4d31-a519-8d2af789609b" />
