@@ -2,7 +2,7 @@
 
 ## Takım Üyeleri
 - Emir (Frontend)
-- Gonca (Frontend)
+- Gonca (Scrum Master)
 - Zehra (Model Training)
 - Berkay (Developer)
 - Samet Uğur Şanlıdağ (Developer)
