@@ -41,8 +41,7 @@ Sistem sayesinde kullanıcılar sırasıyla:
 - Teknik ve Sade Açıklamalar: Analiz sonucu; hem profesyonel (tıbbi) hem de sadeleştirilmiş (halk diliyle) açıklamalar halinde sunulur.
 - PDF Rapor Çıktısı: Analiz sonuçları, kullanıcıya PDF formatında indirilebilir şekilde sunulur.
 
-## *Trello*
-  <img width="1116" height="499" alt="Ekran Resmi 2025-08-03 23 04 47" src="https://github.com/user-attachments/assets/be6d0c6a-2d1d-4f57-98ff-12219a1585cc" />
+
 
 
 
@@ -96,7 +95,11 @@ Sistem sayesinde kullanıcılar sırasıyla:
 - Latince kelimelere tooltip ile açıklama özelliği geliştirildi.
 - PDF ve DOCX çıktısı alınabilmesi sağlandı.
 
+## *Sprint 3*
 
+## *Trello*
+  <img width="1116" height="499" alt="Ekran Resmi 2025-08-03 23 04 47" src="https://github.com/user-attachments/assets/be6d0c6a-2d1d-4f57-98ff-12219a1585cc" />
+  
 ### *Arayüzün Temel Görüntüsü*
 <img width="1418" height="670" alt="Ekran Resmi 2025-08-03 23 12 58" src="https://github.com/user-attachments/assets/ca5f7deb-dd55-4d31-a519-8d2af789609b" />
 
@@ -111,7 +114,6 @@ Sistem sayesinde kullanıcılar sırasıyla:
 ### *Analiz Sonucu*
 
 <img width="1424" height="461" alt="Ekran Resmi 2025-08-03 23 14 13" src="https://github.com/user-attachments/assets/60a261d3-7a63-4ca3-a661-aeed341c6d6e" />
-
 
 
 <img width="1424" height="650" alt="Ekran Resmi 2025-08-03 23 13 49" src="https://github.com/user-attachments/assets/85c7d378-d6e1-442e-8509-b3a635cc06a2" />
